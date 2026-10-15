@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>جودة الزيتون اليومية</title>
+<style>
+:root{--b:#2d5a27;--d:#1c3818;--bg:#f2f5ee;--ln:#cdd8c6;--ink:#1a2717;--ok:#2d5a27;--bad:#b42318;--warn:#b7791f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 Cairo,Tahoma,"Segoe UI",system-ui,sans-serif}
+header{background:var(--d);color:#fff;padding:8px 14px;position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+header:empty{display:none}
+main{max-width:980px;margin:0 auto;padding:12px}
+section{background:#fff;border:1px solid var(--ln);border-radius:8px;margin:0 0 12px;overflow:hidden}
+h2{margin:0;padding:6px 12px;background:var(--b);color:#fff;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bd{padding:10px 12px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+label.f{display:block;font-weight:700;font-size:12px}
+input,select,textarea,button{font:inherit;color:inherit}
+input:not([type=checkbox]),select,textarea{width:100%;border:1px solid var(--ln);border-radius:5px;padding:5px 7px;background:#fff}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--b);outline-offset:1px}
+.sc{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th,td{border:1px solid var(--ln);padding:2px;text-align:center}
+th{background:#e8f0e5;font-size:12px}
+td input,td select{border:0;text-align:center;min-width:64px}
+.res{display:block;font-weight:800;font-size:12px;padding:2px 4px;min-width:90px}
+.ok{color:var(--ok)}.bad{color:var(--bad);background:#fee4e2}.warn{color:var(--warn);background:#fef0c7}
+button{cursor:pointer;border:0;border-radius:5px;padding:5px 10px;background:var(--b);color:#fff;font-weight:700}
+h2 button,header button{background:#fff;color:var(--b)}
+.sec{background:#eef3ea;color:var(--b);border:1px solid var(--ln)}
+.x{background:none!important;color:var(--bad)!important;padding:2px 6px}
+.ck{display:flex;gap:8px;align-items:flex-start;padding:3px 0}
+.ck input{width:auto;margin-top:5px}
+.ck small{color:#6b7c66;margin-inline-start:auto;white-space:nowrap}
+.st{font-size:12px;padding:2px 10px;border-radius:99px;background:#ffffff26}
+.st.bad{background:var(--bad)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:12px}
+.bar label{min-width:150px}
+.card{max-width:340px;margin:60px auto;background:#fff;border:1px solid var(--ln);border-radius:8px;padding:18px}
+.card h1{font-size:18px;margin:0 0 12px;color:var(--b)}
+.card label{margin-bottom:8px}
+.err{color:var(--bad);font-weight:700;min-height:22px}
+.po{display:none}
+.hint{font-size:12px;color:#5b6b56;margin:6px 0 0}
+@media print{
+header,.np,.x,button{display:none!important}
+body{background:#fff;font-size:11px}main{padding:0;max-width:none}
+section{break-inside:avoid;border-color:#999}
+input,select,textarea{border:0!important;background:none!important;appearance:none;padding:0!important}
+.po{display:block;margin:0 0 8px}.sc{overflow:visible}table{min-width:0}
+}
+@media(max-width:600px){main{padding:8px}.card{margin:24px 8px}.bar{align-items:stretch}.bar label{min-width:100%}button{min-height:40px}th,td{padding:5px}table{min-width:700px}}
+</style>
+</head>
+<body>
+<header id="hd"></header>
+<main id="app"></main>
+<script>
+// ===== إعدادات الربط (انسخها من Supabase: Project Settings > API) =====
+const CFG={url:'https://depgyqdvososrrtkvvlz.supabase.co',key:'sb_publishable_Mh720Y5zq_UfrdMFCTassw_syh8syW3'};
+// ======================================================================
+const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cairoParts=()=>Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Cairo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+const today=()=>{const d=cairoParts();return d.year+'-'+d.month+'-'+d.day};
+const nowT=()=>{const d=cairoParts();return d.hour+':'+d.minute};
+const BINS=[];for(let v=80;v<500;v+=20)BINS.push(v+'/'+(v+20));
+const TYPES=['كامل أخضر','كامل كلاماتا','شرائح'];
+const START=['مراجعة خطة الإنتاج وتحديد الصنف (كامل / شرائح / كلاماتا) ومطابقتها لأوامر التشغيل','معرفة المقاسات المطلوبة وأي مواصفات خاصة بطلبيات العملاء والتصدير','مراجعة ملاحظات اليوم السابق ومتابعة الأعطال المعلقة','معايرة وجاهزية أدوات الفحص (الميزان، pH، البوميه، أواني العينات)'];
+const STAGES=['إزالة الأوراق والأعناق: كفاءة الماكينة وخلو الخط من الشوائب','الفرز اليدوي على السير: استبعاد المكسور والمخدوش والذابل والمصاب وسرعة السير','فحص العيارات: عينة وعد الحبات ومطابقتها للمواصفة','فحص وتعبئة البراميل: تجانس الحبات والتحقق من الهالك وتوثيق الكود'];
+const NEW={
+ slices:()=>({t:nowT(),total:'',waste:'',note:''}),
+ cals:()=>({t:nowT(),count:'',req:'',note:''}),
+ barrels:()=>({code:'',type:TYPES[0],size:'',waste:'',note:''}),
+ nc:()=>({prob:'',cause:'',action:'',t:nowT()}),
+ next:()=>({done:false,text:''})};
+const blank=()=>({batch:'',inspector:((S&&S.email)||'').split('@')[0],shift:'',
+ spec:{ph:[3.6,4],be:[7.5,9.5],waste:14,wt:500},
+ ck:{s:[null,null,null,null],g:[null,null,null,null]},
+ lab:{ph:'',phn:'',be:'',ben:''},
+ slices:[NEW.slices()],cals:[NEW.cals()],barrels:[NEW.barrels()],nc:[],
+ notes:{full:'',sl:'',hy:''},next:[NEW.next()]});
+
+let S=null;try{S=JSON.parse(localStorage.getItem('qc_sess')||'null')}catch(e){}
+let D=today(),R=blank(),ver=null,by='',dirty=false,saving=false,blocked=false,rev=0,timer,dates=[],TEAM=[],AUDIT=[];
+
+// ---------- الاتصال ----------
+async function auth(body,gt){
+ const r=await fetch(CFG.url+'/auth/v1/token?grant_type='+gt,{method:'POST',headers:{apikey:CFG.key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+ const j=await r.json();if(!r.ok)throw new Error(j.error_description||j.msg||'تعذر تسجيل الدخول');
+ S={tk:j.access_token,rf:j.refresh_token,exp:Date.now()+j.expires_in*1000-60000,email:j.user.email,id:j.user.id};
+ localStorage.setItem('qc_sess',JSON.stringify(S));
+}
+async function signup(email,password){const r=await fetch(CFG.url+'/auth/v1/signup',{method:'POST',headers:{apikey:CFG.key,'Content-Type':'application/json'},body:JSON.stringify({email,password})});const j=await r.json();if(!r.ok)throw new Error(j.msg||j.message||j.error_description||'تعذر إنشاء الحساب');if(j.access_token){S={tk:j.access_token,rf:j.refresh_token,exp:Date.now()+j.expires_in*1000-60000,email:j.user.email,id:j.user.id};localStorage.setItem('qc_sess',JSON.stringify(S));return true}return false}
+function logout(){S=null;localStorage.removeItem('qc_sess');boot()}
+async function api(path,opt={}){
+ if(!S.id&&S.rf){try{await auth({refresh_token:S.rf},'refresh_token')}catch(e){logout();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى')}}
+ if(Date.now()>S.exp){try{await auth({refresh_token:S.rf},'refresh_token')}catch(e){logout();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى')}}
+ const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{apikey:CFG.key,Authorization:'Bearer '+S.tk,'Content-Type':'application/json',...opt.headers}});
+ if(r.status===401){logout();throw new Error('انتهت الجلسة')}
+ return r;
+}
+async function load(date){
+ try{
+  clearTimeout(timer);D=date;blocked=false;
+  const r=await api('reports?report_date=eq.'+date+'&select=data,updated_at,updated_by');
+  const j=await r.json();if(!r.ok)throw new Error(j.message||'خطأ في التحميل');
+  if(j.length){R=Object.assign(blank(),j[0].data);ver=j[0].updated_at;by=j[0].updated_by}
+  else{R=blank();ver=null;by=''}
+  dirty=false;render();setSt(ver?'محفوظ':'يوم جديد — لم يُحفظ بعد');listDates();
+ }catch(e){setSt('تعذر التحميل: '+e.message,'bad')}
+}
+async function loadTeam(){
+ const r=await api('team_members?select=user_id,email,role,enabled&order=email.asc');const j=await r.json();if(!r.ok)throw new Error(j.message||'تعذر تحميل أعضاء الفريق');TEAM=j;
+}
+async function loadAudit(){const r=await api('report_audit?select=id,report_date,action,changed_at,changed_by,old_data,new_data&order=changed_at.desc&limit=50');const j=await r.json();if(!r.ok)throw new Error(j.message||'تعذر تحميل سجل التدقيق');AUDIT=j}
+async function listDates(){
+ try{const r=await api('reports?select=report_date&order=report_date.desc&limit=120');const j=await r.json();
+ dates=j.map(x=>x.report_date);const a=$('#arch');
+ if(a)a.innerHTML='<option value="">التقارير السابقة…</option>'+dates.map(d=>'<option>'+d+'</option>').join('')}catch(e){}
+}
+function sched(ms=1200){clearTimeout(timer);timer=setTimeout(save,ms)}
+async function save(){
+ if(!dirty||saving||blocked)return;
+ if(!String(R.batch||'').trim()){setSt('اكتب كود التشغيلة قبل حفظ التقرير','bad');return}
+ saving=true;const my=rev;setSt('جارٍ الحفظ…');
+ try{
+  let r;
+  if(!ver)r=await api('reports',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({report_date:D,data:R,updated_by:S.email})});
+  else r=await api('reports?report_date=eq.'+D+'&updated_at=eq.'+encodeURIComponent(ver),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({data:R,updated_by:S.email})});
+  if(r.status===409)return conflict();
+  const j=await r.json();if(!r.ok)throw new Error(j.message||'خطأ');
+  if(!j.length)return conflict();
+  ver=j[0].updated_at;by=S.email;dirty=rev!==my;setSt('تم الحفظ '+nowT());$('#by')&&($('#by').textContent='آخر تعديل: '+by);
+  if(dates.indexOf(D)<0)listDates();
+ }catch(e){setSt('لم يُحفظ: '+e.message+' — سنعيد المحاولة','bad');sched(8000)}
+ finally{saving=false;if(dirty&&!blocked&&!timer)sched()}
+}
+function conflict(){blocked=true;const s=$('#st');s.className='st bad';s.innerHTML='عدّل مستخدم آخر هذا اليوم قبلك. <button data-act="reload">تحميل آخر نسخة</button>'}
+
+// ---------- أدوات الحالة ----------
+const get=p=>p.split('.').reduce((o,k)=>o==null?o:o[k],R);
+const set=(p,v)=>{const k=p.split('.'),l=k.pop();k.reduce((o,x)=>o[x],R)[l]=v};
+const I=(p,t='text',ph='')=>`<input data-p="${p}" type="${t}" ${t==='number'?'step="any" inputmode="decimal" min="0"':''} placeholder="${ph}" value="${esc(get(p))}" ${S?.role==='viewer'?'disabled':''}>`;
+const Sel=(p,o,bl)=>`<select data-p="${p}" ${S?.role==='viewer'?'disabled':''}>${bl?'<option value="">—</option>':''}${o.map(x=>`<option${get(p)===x?' selected':''}>${x}</option>`).join('')}</select>`;
+const X=p=>S?.role==='viewer'?'':`<button class="x" data-del="${p}" title="حذف">✕</button>`;
+const Add=(k,t)=>S?.role==='viewer'?'':`<button data-add="${k}">+ ${t}</button>`;
+const Ck=(g,i,txt)=>`<label class="ck"><input type="checkbox" data-ck="${g}.${i}"${R.ck[g][i]?' checked':''} ${S?.role==='viewer'?'disabled':''}><span>${txt}</span><small data-c="ck${g}${i}"></small></label>`;
+const Sec=(t,btn,body)=>`<section><h2><span>${t}</span>${btn||''}</h2>${body}</section>`;
+
+// ---------- العرض ----------
+function render(){
+ const sp=R.spec;
+ const slices=R.slices.map((s,i)=>`<tr><td>${i+1}</td><td>${I(`slices.${i}.t`,'time')}</td><td>${I(`slices.${i}.total`,'number','جم')}</td><td>${I(`slices.${i}.waste`,'number','جم')}</td><td><span class="res" data-c="sl${i}"></span></td><td>${I(`slices.${i}.note`)}</td><td>${X('slices.'+i)}</td></tr>`).join('');
+ const cals=R.cals.map((c,i)=>`<tr><td>${i+1}</td><td>${I(`cals.${i}.t`,'time')}</td><td>${I(`cals.${i}.count`,'number','عدد الحبات')}</td><td>${Sel(`cals.${i}.req`,BINS,1)}</td><td><span class="res" data-c="cl${i}"></span></td><td>${I(`cals.${i}.note`)}</td><td>${X('cals.'+i)}</td></tr>`).join('');
+ const calsTotal=R.cals.reduce((n,c)=>n+(Number(c.count)||0),0);
+ const bars=R.barrels.map((b,i)=>`<tr><td>${I(`barrels.${i}.code`,'text','رقم البرميل')}</td><td>${Sel(`barrels.${i}.type`,TYPES)}</td><td>${I(`barrels.${i}.size`,'text','مثال 140/160')}</td><td>${I(`barrels.${i}.waste`,'number','%')}</td><td><span class="res" data-c="br${i}"></span></td><td>${I(`barrels.${i}.note`)}</td><td>${X('barrels.'+i)}</td></tr>`).join('');
+ const ncs=R.nc.map((n,i)=>`<tr><td>${I(`nc.${i}.prob`)}</td><td>${I(`nc.${i}.cause`)}</td><td>${I(`nc.${i}.action`)}</td><td>${I(`nc.${i}.t`,'time')}</td><td>${X('nc.'+i)}</td></tr>`).join('');
+ const nx=R.next.map((n,i)=>`<div class="ck"><input type="checkbox" data-p="next.${i}.done"${n.done?' checked':''} ${S?.role==='viewer'?'disabled':''}>${I(`next.${i}.text`,'text','مهمة للوردية التالية')}${X('next.'+i)}</div>`).join('');
+ const lab=(k,name,r,u)=>`<tr><td>${name}</td><td>${I('lab.'+k,'number',u)}</td><td>${r}</td><td><span class="res" data-c="lb${k}"></span></td><td>${I('lab.'+k+'n')}</td></tr>`;
+ const auditPanel=S.role==='admin'?Sec('سجل التعديلات',`<button data-act="audit">تحديث السجل</button>`,`<div class="bd sc"><table><tr><th>التاريخ<th>العملية<th>المستخدم<th>وقت التعديل<th>تفاصيل</tr>${AUDIT.map(a=>`<tr><td>${esc(a.report_date)}</td><td>${({INSERT:'إنشاء',UPDATE:'تعديل',DELETE:'حذف'}[a.action]||esc(a.action))}</td><td>${esc(a.changed_by)}</td><td>${esc(new Intl.DateTimeFormat('ar-EG',{dateStyle:'short',timeStyle:'short',timeZone:'Africa/Cairo'}).format(new Date(a.changed_at)))}</td><td><details><summary>عرض</summary><pre>${esc(JSON.stringify({قبل:a.old_data,بعد:a.new_data},null,2))}</pre></details></td></tr>`).join('')}</table></div>`):'';
+ const teamPanel=S.role==='admin'?Sec('إدارة الفريق','',`<div class="bd sc"><table><tr><th>البريد<th>الدور<th>الحساب مفعّل<th></tr>${TEAM.map(m=>`<tr><td>${esc(m.email)}${m.user_id===S.id?' (أنت)':''}</td><td>${m.user_id===S.id?({admin:'مدير',operator:'مراقب',viewer:'قراءة فقط'}[m.role]||m.role):`<select data-role="${esc(m.user_id)}"><option value="admin"${m.role==='admin'?' selected':''}>مدير</option><option value="operator"${m.role==='operator'?' selected':''}>مراقب</option><option value="viewer"${m.role==='viewer'?' selected':''}>قراءة فقط</option></select>`}</td><td>${m.user_id===S.id?'—':`<input type="checkbox" data-active="${esc(m.user_id)}"${m.enabled?' checked':''}>`}</td><td>${m.user_id===S.id?'':`<button data-member="${esc(m.user_id)}">حفظ الصلاحية</button>`}</td></tr>`).join('')}</table><p class="hint">الحسابات الجديدة تنتظر تفعيل المدير. المراقب يعدّل التقارير، والقراءة فقط يطّلع عليها.</p></div>`):'';
+ $('#app').innerHTML=`
+ <h1 class="po">تقرير جودة الزيتون اليومي — ${D} — تشغيلة ${esc(R.batch)}</h1>
+ ${teamPanel}
+ ${auditPanel}
+ <div class="bar np"><label class="f">التاريخ<input type="date" id="dt" value="${D}"></label>
+  <label class="f">الأرشيف<select id="arch"><option value="">التقارير السابقة…</option>${dates.map(d=>'<option>'+d+'</option>').join('')}</select></label>
+  <button class="sec" data-act="today">اليوم</button>
+  <span class="res" id="viol"></span><small id="by">${by?'آخر تعديل: '+esc(by):''}</small></div>
+ ${Sec('بيانات الوردية','',`<div class="bd g"><label class="f">كود التشغيلة <span class="bad">(مطلوب)</span><input data-p="batch" value="${esc(R.batch)}" placeholder="أدخل كود التشغيلة" required></label><label class="f">المراقب<input data-p="inspector" value="${esc(R.inspector)}"></label><label class="f">الوردية<input data-p="shift" value="${esc(R.shift)}" placeholder="8:00 ص – 6:00 م"></label></div>`)}
+ ${Sec('المواصفات المعتمدة (تعدَّل عند الحاجة)','',`<div class="bd g"><label class="f">pH من<input type="number" step="any" data-p="spec.ph.0" value="${sp.ph[0]}"></label><label class="f">pH إلى<input type="number" step="any" data-p="spec.ph.1" value="${sp.ph[1]}"></label><label class="f">بوميه من<input type="number" step="any" data-p="spec.be.0" value="${sp.be[0]}"></label><label class="f">بوميه إلى<input type="number" step="any" data-p="spec.be.1" value="${sp.be[1]}"></label><label class="f">أقصى هالك %<input type="number" step="any" data-p="spec.waste" value="${sp.waste}"></label><label class="f">وزن عينة العيار (جم)<input type="number" step="any" data-p="spec.wt" value="${sp.wt}"></label></div>`)}
+ ${Sec('بداية اليوم','',`<div class="bd">${START.map((t,i)=>Ck('s',i,t)).join('')}</div>`)}
+ ${Sec('مراحل خط الزيتون الكامل','',`<div class="bd">${STAGES.map((t,i)=>Ck('g',i,t)).join('')}</div>`)}
+ ${Sec('خط الشرائح وقياس الهالك',Add('slices','عينة'),`<div class="sc"><table><tr><th>#<th>الوقت<th>وزن العينة (جم)<th>وزن الهالك (جم)<th>النتيجة<th>ملاحظات<th class="np"></tr>${slices}</table></div><p class="bd hint">الهالك % = وزن الهالك ÷ وزن العينة × 100، والقرار تلقائي حسب الحد الأقصى أعلاه.</p>`)}
+ ${Sec('فحص التحجيم والعيارات',Add('cals','فحص'),`<div class="sc"><table><tr><th>#<th>الوقت<th>عدد الحبات في العينة<th>المقاس المطلوب<th>النتيجة<th>ملاحظات<th class="np"></tr>${cals}<tr><th colspan=2>إجمالي الحبات في العينات</th><th id="calsTotal">${calsTotal}</th><td colspan=4></td></tr></table></div><p class="bd hint">حبة/كجم = العدد × 1000 ÷ وزن العينة، ثم يحدد النظام المقاس الذي تقع فيه ويقارنه بالمطلوب.</p>`)}
+ ${Sec('الفحوصات المعملية','',`<div class="sc"><table><tr><th>الفحص<th>القراءة<th>المواصفة<th>النتيجة<th>ملاحظات</tr>${lab('ph','pH',sp.ph[0]+' – '+sp.ph[1],'pH')}${lab('be','بوميه °Bé',sp.be[0]+' – '+sp.be[1],'°Bé')}</table></div>`)}
+ ${Sec('سجل البراميل',Add('barrels','برميل'),`<div class="sc"><table><tr><th>رقم البرميل<th>الصنف<th>المقاس<th>الهالك %<th>النتيجة<th>ملاحظات<th class="np"></tr>${bars}</table></div>`)}
+ ${Sec('المشكلات وحالات عدم المطابقة',Add('nc','مشكلة'),`<div class="sc"><table><tr><th>المشكلة<th>السبب المحتمل<th>الإجراء التصحيحي<th>الوقت<th class="np"></tr>${ncs}</table></div>${R.nc.length?'':'<p class="bd hint">لا مشكلات مسجلة. اضغط «مشكلة» لإضافة واحدة.</p>'}`)}
+ ${Sec('الملاحظات والتسليم','',`<div class="bd"><label class="f">تقرير فحص الزيتون<textarea rows="3" data-p="notes.full" ${S?.role==='viewer'?'disabled':''}>${esc(R.notes.full)}</textarea></label><label class="f">تقرير خط الشرائح<textarea rows="3" data-p="notes.sl" ${S?.role==='viewer'?'disabled':''}>${esc(R.notes.sl)}</textarea></label><label class="f">نظافة وبيئة العمل<textarea rows="2" data-p="notes.hy" ${S?.role==='viewer'?'disabled':''}>${esc(R.notes.hy)}</textarea></label><p class="f">مهام الوردية التالية ${Add('next','مهمة')}</p>${nx}<p class="hint">توقيع مراقب الجودة: ................ &nbsp; اعتماد مدير المصنع: ................</p></div>`)}`;
+ calc();
+}
+
+// ---------- الحسابات والقرارات التلقائية ----------
+const q=id=>document.querySelector('[data-c="'+id+'"]');
+const out=(id,t,c)=>{const e=q(id);if(e){e.textContent=t;e.className='res '+(c||'')}};
+function calc(){
+ const sp=R.spec,mx=+sp.waste;
+ R.slices.forEach((s,i)=>{const t=+s.total;if(!(t>0)||s.waste===''){out('sl'+i,'—');return}
+  const p=+s.waste/t*100,bad=p>mx;out('sl'+i,p.toFixed(2)+'% — '+(bad?'مرفوض':'مطابق'),bad?'bad':'ok')});
+ R.cals.forEach((c,i)=>{const n=+c.count,w=+sp.wt;if(!(n>0)||!(w>0)){out('cl'+i,'—');return}
+  const pk=Math.round(n*1000/w),bin=BINS.find(b=>{const [l,h]=b.split('/');return pk>=+l&&pk<+h});
+  let t=(bin||'خارج النطاق')+' ('+pk+' حبة/كجم)',cl='ok';
+  if(!bin)cl='warn';
+  if(c.req){if(bin===c.req)t+=' — مطابق';else{t+=' — مرفوض';cl='bad'}}
+  out('cl'+i,t,cl)});
+ const total=$('#calsTotal');if(total)total.textContent=R.cals.reduce((n,c)=>n+(Number(c.count)||0),0);
+ [['ph',sp.ph],['be',sp.be]].forEach(([k,r])=>{const v=R.lab[k];if(v===''){out('lb'+k,'—');return}
+  const ok=+v>=+r[0]&&+v<=+r[1];out('lb'+k,ok?'مطابق':'خارج المواصفة',ok?'ok':'bad')});
+ R.barrels.forEach((b,i)=>{if(b.waste===''){out('br'+i,'—');return}
+  const bad=+b.waste>mx;out('br'+i,bad?'هالك مرتفع':'مطابق',bad?'bad':'ok')});
+ ['s','g'].forEach(g=>R.ck[g].forEach((v,i)=>{const e=q('ck'+g+i);if(e)e.textContent=v?'✓ '+v:''}));
+ const n=document.querySelectorAll('[data-c].bad').length,v=$('#viol');
+ if(v){v.textContent=n?n+' نتيجة غير مطابقة':'لا مخالفات';v.className='res '+(n?'bad':'ok')}
+}
+function chg(){rev++;dirty=true;calc();if(!blocked){setSt('تعديلات غير محفوظة…');sched()}}
+
+// ---------- الأحداث ----------
+document.addEventListener('input',e=>{
+ const t=e.target;
+ if(S.role==='viewer')return;
+ if(t.dataset.ck){const [g,i]=t.dataset.ck.split('.');R.ck[g][i]=t.checked?nowT():null;chg()}
+ else if(t.dataset.p){set(t.dataset.p,t.type==='checkbox'?t.checked:t.value);chg()}
+});
+document.addEventListener('change',async e=>{
+ const t=e.target;if(t.id!=='dt'&&t.id!=='arch')return;
+ if(!t.value)return;
+ if(dirty&&!blocked)await save();
+ if(dirty){t.value=D;return}
+ load(t.value);
+});
+document.addEventListener('click',async e=>{
+ const t=e.target.closest('button');if(!t)return;
+ const d=t.dataset;
+ if(d.add){if(S.role==='viewer'){alert('حسابك للقراءة فقط');return}R[d.add].push(NEW[d.add]());render();chg()}
+ else if(d.del){if(S.role==='viewer'){alert('حسابك للقراءة فقط');return}if(!confirm('حذف هذا الصف؟'))return;const [k,i]=d.del.split('.');R[k].splice(+i,1);render();chg()}
+ else if(d.act==='today'){if(dirty&&!blocked)await save();if(dirty)return;load(today())}
+ else if(d.act==='reload')load(D);
+ else if(d.act==='audit'){try{await loadAudit();render();setSt('تم تحديث سجل التعديلات')}catch(x){setSt(x.message,'bad')}}
+ else if(d.act==='print')window.print();
+ else if(d.act==='out')logout();
+ else if(d.member){const uid=d.member,row=TEAM.find(x=>x.user_id===uid);if(!row)return;const sel=document.querySelector(`[data-role="${uid}"]`),en=document.querySelector(`[data-active="${uid}"]`);try{const r=await api('team_members?user_id=eq.'+encodeURIComponent(uid),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({role:sel?.value||row.role,enabled:!!en?.checked})});const j=await r.json();if(!r.ok)throw new Error(j.message||'تعذر تحديث الصلاحية');await loadTeam();render();setSt('تم تحديث صلاحية العضو')}catch(x){setSt('تعذر تحديث الصلاحية: '+x.message,'bad')}}
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&!dirty&&!saving)load(D)});
+window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});
+
+// ---------- البداية ----------
+async function boot(){
+ $('#hd').innerHTML='';
+ if(CFG.url.startsWith('PASTE')){$('#app').innerHTML='<div class="card"><h1>الإعداد ناقص</h1><p>ضع رابط Supabase والمفتاح في أول سكربت داخل index.html (الخطوات في README).</p></div>';return}
+ if(!S){
+  $('#app').innerHTML=`<form class="card" id="lg"><h1>🫒 جودة الزيتون اليومية</h1><p>سجّل الدخول أو أنشئ حسابًا للفريق.</p><label class="f">البريد الإلكتروني<input type="email" id="em" required autocomplete="username"></label><label class="f">كلمة المرور<input type="password" id="pw" required minlength="8" autocomplete="current-password"></label><div class="err" id="er"></div><button type="submit">دخول</button> <button type="button" id="signup" class="sec">إنشاء حساب</button></form>`;
+  const em=()=>$('#em').value.trim(),pw=()=>$('#pw').value;
+  $('#lg').onsubmit=async e=>{e.preventDefault();$('#er').textContent='';try{await auth({email:em(),password:pw()},'password');boot()}catch(x){$('#er').textContent=x.message}};
+  $('#signup').onclick=async()=>{if(!$('#lg').reportValidity())return;$('#er').textContent='جارٍ إنشاء الحساب…';try{const ok=await signup(em(),pw());if(ok)boot();else $('#er').textContent='تم إنشاء الحساب. راجع بريدك لتأكيده، ثم سجّل الدخول.'}catch(x){$('#er').textContent=x.message}};
+  return}
+ try{if(!S.id)await auth({refresh_token:S.rf},'refresh_token');const me=await api('team_members?user_id=eq.'+encodeURIComponent(S.id)+'&select=user_id,email,role,enabled');const mj=await me.json();if(!me.ok||!mj.length)throw new Error('الحساب غير مسجل ضمن فريق الجودة.');if(!mj[0].enabled){$('#app').innerHTML=`<div class="card"><h1>الحساب في انتظار التفعيل</h1><p>تواصل مع مدير الفريق لتفعيل حسابك.</p><button data-act="out">خروج</button></div>`;return}S.role=mj[0].role;S.active=true;localStorage.setItem('qc_sess',JSON.stringify(S));if(S.role==='admin'){await loadTeam();await loadAudit()}}catch(x){$('#app').innerHTML=`<div class="card"><h1>تعذر التحقق من الحساب</h1><p>${esc(x.message)}</p><button data-act="out">خروج</button></div>`;return}
+ const roleName={admin:'مدير',operator:'مراقب',viewer:'قراءة فقط'}[S.role]||'عضو';
+ $('#hd').innerHTML=`<b>🫒 جودة الزيتون اليومية</b><span class="st" id="st"></span><span><small>${esc(S.email)} · ${roleName}</small> <button data-act="print">طباعة / PDF</button> <button data-act="out">خروج</button></span>`;
+ load(D);
+}
+boot();
+</script>
+</body>
+</html>
